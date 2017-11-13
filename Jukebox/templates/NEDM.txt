@@ -2,6 +2,7 @@
 #include "zcommon.acs"
 
 <<MUSICSTRINGS>>
+<<MUSICNAMES>>
 <<MUSICLENGTHS>>
 int tracks = <<NUMTRACKS>>;
 
@@ -9,6 +10,7 @@ script "NEDM" OPEN
 {
 	int tracknum = -1;
 	int oldtrackNum = 0;
+	int delaytimer = 1; //let's do a tiny bit more error checking
 	while(1)
 	{
 		//Patented retard logic to avoid replays
@@ -31,7 +33,7 @@ script "NEDM" OPEN
 		}
 		SetFont("CONFONT");
 		//improve this later, maybe with more templating
-		HudMessage(	s:"\cdNow Playing: ", s:songNames[tracknum];
+		HudMessage(	s:"NOW PLAYING: ", s:songRealNames[tracknum];
 					HUDMSG_PLAIN, 
 					3485, //random to avoid collision
 					CR_GREEN,
@@ -39,6 +41,9 @@ script "NEDM" OPEN
 					0.0,
 					2.0);
 		SetMusic(songNames[tracknum], 0);
-		delay(durations[tracknum] * 35);
+		delaytimer = durations[tracknum] * 35;
+		if(delaytimer == 0)
+			delaytimer = 1;
+		delay(delaytimer);
 	}
 }
