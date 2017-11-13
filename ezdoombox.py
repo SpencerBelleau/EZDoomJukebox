@@ -12,7 +12,7 @@ pk3MusicPath = "./Jukebox/music/"
 acsScriptPath = "./Jukebox/source/"
 acsOutPath = "./Jukebox/acs/"
 
-pk3Name = "EZJukebox.pk3"
+pk3Name = "EZDoomJukebox.pk3"
 
 songArray = "str songNames["
 songArrayP2 = 	"] = {"
@@ -26,11 +26,17 @@ templateSongArray = "<<MUSICSTRINGS>>"
 templateDurationArray = "<<MUSICLENGTHS>>"
 templateSongNumber = "<<NUMTRACKS>>"
 
-#Ensure we actually have the destinations awailable
+#Ensure we actually have the destinations available
 os.makedirs(pk3MusicPath, exist_ok=True)
 os.makedirs(acsScriptPath, exist_ok=True)
 os.makedirs(acsOutPath, exist_ok=True)
 
+#get new pk3 name
+newPk3Name = input("Enter name for output pk3 (default EZDoomJukebox.pk3): ")
+if(not newPk3Name == ""):
+	if(not newPk3Name.endswith(".pk3")):
+		newPk3Name = newPk3Name + ".pk3"
+	pk3Name = newPk3Name
 
 ################## Find the songs we're gonna use
 
