@@ -46,7 +46,27 @@ script "NEDM" OPEN
 		SetMusic(songNames[tracknum], 0);
 		delaytimer = durations[tracknum];
 		if(delaytimer == 0)
+		{
 			delaytimer = 1;
-		delay(delaytimer);
+		}
+		while(delaytimer > 0 && GetCVar("ezjb_next") == 0)
+		{
+			delay(5); //no need to make this more precise
+			delaytimer -= 5;
+		}
+		SetCVar("ezjb_next", 0);
+		//The fact that I have to do this amazes me a little
+		int ensureNotBroken = 0;
+		while(GetCVar("ezjb_next") != 0 && ensureNotBroken < 35)
+		{
+			delay(1);
+			ensureNotBroken++;
+		}
+		if(GetCVar("ezjb_next") != 0)
+		{
+			Log(s:"Could not switch to next song");
+			Log(d:GetCVar("ezjb_next"));
+			break;
+		}
 	}
 }
