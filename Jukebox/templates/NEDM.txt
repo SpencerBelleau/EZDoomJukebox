@@ -1,0 +1,44 @@
+#library "NEDM"
+#include "zcommon.acs"
+
+<<MUSICSTRINGS>>
+<<MUSICLENGTHS>>
+int tracks = <<NUMTRACKS>>;
+
+script "NEDM" OPEN
+{
+	int tracknum = -1;
+	int oldtrackNum = 0;
+	while(1)
+	{
+		//Patented retard logic to avoid replays
+		if(tracknum == -1 && tracks > 1)
+		{
+			tracknum = random(0, tracks - 1);
+		}
+		else if(tracks > 1)
+		{
+			oldtrackNum = tracknum;
+			while(tracknum == oldtrackNum)
+			{
+				tracknum = random(0, tracks - 1);
+			}
+		}
+		else
+		{
+			//you only got one song son wtf
+			tracknum = 0;
+		}
+		SetFont("CONFONT");
+		//improve this later, maybe with more templating
+		HudMessage(	s:"\cdNow Playing: ", s:songNames[tracknum];
+					HUDMSG_PLAIN, 
+					3485, //random to avoid collision
+					CR_GREEN,
+					0.5,
+					0.0,
+					2.0);
+		SetMusic(songNames[tracknum], 0);
+		delay(durations[tracknum] * 35);
+	}
+}
