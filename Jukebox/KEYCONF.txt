@@ -1,0 +1,4 @@
+addkeysection "Jukebox Controls" EZDoomJukeboxControls
+	addmenukey "Next Song" nextsong
+	alias nextsong "ezjb_next 1"
+	defaultbind Q nextsong
