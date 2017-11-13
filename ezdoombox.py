@@ -26,10 +26,19 @@ templateSongArray = "<<MUSICSTRINGS>>"
 templateDurationArray = "<<MUSICLENGTHS>>"
 templateSongNumber = "<<NUMTRACKS>>"
 
+#Ensure we actually have the destinations awailable
+os.makedirs(pk3MusicPath, exist_ok=True)
+os.makedirs(acsScriptPath, exist_ok=True)
+os.makedirs(acsOutPath, exist_ok=True)
+
+
 ################## Find the songs we're gonna use
 
 for(_, _, filenames) in os.walk(baseMusicPath):
 	for fn in filenames:
+		if(fn.endswith(".txt")):
+			os.remove(baseMusicPath + fn)
+			continue
 		tag = TinyTag.get(baseMusicPath + fn)
 		songs.append([fn, tag.duration]) #use filename as song name (for now)
 
@@ -37,6 +46,11 @@ songArray = songArray + str(len(songs)) + songArrayP2
 durationArray = durationArray + str(len(songs)) + durationArrayP2
 
 ################## Copy them into the right directory and create arrays
+
+if(len(songs) == 0):
+	print("Add some music, that's what you got this for right?")
+	input()
+	sys.exit(-1)
 
 for i in range(len(songs)):
 	print("Copying from " + baseMusicPath + songs[i][0] + " to " + pk3MusicPath + songs[i][0]) #don't actually do it yet
