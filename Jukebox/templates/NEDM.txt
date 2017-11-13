@@ -3,14 +3,15 @@
 
 <<MUSICSTRINGS>>
 <<MUSICNAMES>>
-<<MUSICLENGTHS>>
+//This is no longer needed since it doesn't work properly anyway
+//will remove later
+//<<MUSICLENGTHS>>
 int tracks = <<NUMTRACKS>>;
+int tracknum = -1;
+int oldtrackNum = 0;
 
 script "NEDM" OPEN
 {
-	int tracknum = -1;
-	int oldtrackNum = 0;
-	int delaytimer = 1; //let's do a tiny bit more error checking
 	while(1)
 	{
 		//Patented retard logic to avoid replays
@@ -44,15 +45,9 @@ script "NEDM" OPEN
 						GetCVar("ezjb_textHoldTime") << 16); //pls work?
 		}
 		SetMusic(songNames[tracknum], 0);
-		delaytimer = durations[tracknum];
-		if(delaytimer == 0)
-		{
-			delaytimer = 1;
-		}
-		while(delaytimer > 0 && GetCVar("ezjb_next") == 0)
+		while(GetCVar("ezjb_next") == 0)
 		{
 			delay(5); //no need to make this more precise
-			delaytimer -= 5;
 		}
 		SetCVar("ezjb_next", 0);
 		//The fact that I have to do this amazes me a little
