@@ -1,0 +1,1 @@
+server int ezjb_showOnscreenMessages = 1;			//Shows NOW PLAYING: <songname>

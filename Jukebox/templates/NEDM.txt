@@ -31,15 +31,18 @@ script "NEDM" OPEN
 			//you only got one song son wtf
 			tracknum = 0;
 		}
-		SetFont("CONFONT");
-		//improve this later, maybe with more templating
-		HudMessage(	s:"NOW PLAYING: ", s:songRealNames[tracknum];
-					HUDMSG_PLAIN, 
-					3485, //random to avoid collision
-					CR_GREEN,
-					0.5,
-					0.0,
-					2.0);
+		if(GetCVar("ezjb_showOnscreenMessages") == 1)
+		{
+			SetFont("SMALLFONT");
+			//improve this later, maybe with more templating
+			HudMessage(	s:"\cqNOW PLAYING: \cd", s:songRealNames[tracknum];
+						HUDMSG_PLAIN, 
+						3485, //random to avoid collision
+						CR_UNTRANSLATED,
+						0.5,
+						0.0,
+						2.0);
+		}
 		SetMusic(songNames[tracknum], 0);
 		delaytimer = durations[tracknum] * 35;
 		if(delaytimer == 0)

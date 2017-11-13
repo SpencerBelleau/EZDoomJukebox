@@ -1,0 +1,17 @@
+AddOptionMenu "OptionsMenu"
+{
+	StaticText ""
+	SubMenu "EZ Doom Jukebox Options",			"JukeboxOptions"
+}
+
+OptionMenu "JukeboxOptions"
+{
+	Title "EZ DOOM JUKEBOX OPTIONS"
+	Option "Display Song Names", "ezjb_showOnscreenMessages", "bSongNames"
+}
+
+OptionValue "bSongNames"
+{
+	0, "No"
+	1, "Yes"
+}
