@@ -8,6 +8,7 @@ OptionMenu "JukeboxOptions"
 {
 	Title "EZ DOOM JUKEBOX OPTIONS"
 	Option "Display Song Names", "ezjb_showOnscreenMessages", "bSongNames"
+	Slider "Song Name Display Duration", "ezjb_textHoldTime", 1, 60, 1
 }
 
 OptionValue "bSongNames"

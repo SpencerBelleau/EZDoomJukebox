@@ -1,1 +1,2 @@
 server int ezjb_showOnscreenMessages = 1;			//Shows NOW PLAYING: <songname>
+server int ezjb_textHoldTime = 3;					//Seconds to hold text on screen

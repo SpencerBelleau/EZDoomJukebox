@@ -41,7 +41,7 @@ script "NEDM" OPEN
 						CR_UNTRANSLATED,
 						0.5,
 						0.0,
-						2.0);
+						GetCVar("ezjb_textHoldTime") << 16); //pls work?
 		}
 		SetMusic(songNames[tracknum], 0);
 		delaytimer = durations[tracknum];
