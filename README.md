@@ -4,7 +4,7 @@ You'll need Python 3 for this to work, so get that (latest is 3.6.3 at time of w
 
 Then you'll need tinytag, so open a command line window and type
 
-```pip install tinytag```
+`pip install tinytag`
 
 and it should auto-download.
 ---
