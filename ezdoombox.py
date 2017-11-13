@@ -6,6 +6,11 @@ import os, sys, shutil, subprocess
 def swq(astring):
 	return "\"" + str(astring) + "\""
 
+def vps(astring):
+	return ''.join(c for c in astring if c in validCharacters)
+	
+validCharacters = '\'-_.() abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' #quick hack
+
 songs = []
 baseMusicPath = "./Music/"
 pk3MusicPath = "./Jukebox/music/"
@@ -40,13 +45,15 @@ if(not newPk3Name == ""):
 
 ################## Find the songs we're gonna use
 
-for(_, _, filenames) in os.walk(baseMusicPath):
+for(root, _, filenames) in os.walk(baseMusicPath):
 	for fn in filenames:
+		pathwithname = os.path.join(root, fn)
 		if(fn.endswith(".txt")):
-			os.remove(baseMusicPath + fn)
+			print("Removing dummy text file: " + pathwithname)
+			os.remove(pathwithname)
 			continue
 		try:
-			tag = TinyTag.get(baseMusicPath + fn)
+			tag = TinyTag.get(pathwithname)
 			title = tag.title
 			if(title == None):
 				title = os.path.splitext(fn)[0]
@@ -55,9 +62,9 @@ for(_, _, filenames) in os.walk(baseMusicPath):
 				artist = artist + " - "
 			else:
 				artist = ""
-			songs.append([fn, tag.duration, artist+title]) #use filename as song name (for now)
+			songs.append([pathwithname, tag.duration, vps(artist+title)]) #use filename as song name (for now)
 		except Exception as e:
-			print("Skipping " + fn + "\nReason: " + str(e))
+			print("Skipping " + pathwithname + "\nReason: " + str(e))
 			continue
 
 songArray = songArray + str(len(songs)) + arrayJoin
@@ -72,11 +79,11 @@ if(len(songs) == 0):
 	sys.exit(-1)
 
 for i in range(len(songs)):
-	print("Copying from " + baseMusicPath + songs[i][0] + " to " + pk3MusicPath + songs[i][0]) #don't actually do it yet
-	shutil.copyfile(baseMusicPath + songs[i][0], pk3MusicPath + songs[i][0])
-	songArray = songArray + swq("music/" + songs[i][0])
+	print("Copying " + os.path.basename(songs[i][0]))
+	shutil.copyfile(songs[i][0], pk3MusicPath + os.path.basename(songs[i][0]))
+	songArray = songArray + swq("music/" + os.path.basename(songs[i][0]))
 	songRNArray = songRNArray + swq(songs[i][2])
-	durationArray = durationArray + str(int(songs[i][1])+1)
+	durationArray = durationArray + str(int(songs[i][1])*35) #in doom tics
 	if(i < len(songs)-1):
 		songArray = songArray + ", "
 		songRNArray = songRNArray + ", "

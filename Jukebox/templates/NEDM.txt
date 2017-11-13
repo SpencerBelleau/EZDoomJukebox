@@ -44,7 +44,7 @@ script "NEDM" OPEN
 						2.0);
 		}
 		SetMusic(songNames[tracknum], 0);
-		delaytimer = durations[tracknum] * 35;
+		delaytimer = durations[tracknum];
 		if(delaytimer == 0)
 			delaytimer = 1;
 		delay(delaytimer);
