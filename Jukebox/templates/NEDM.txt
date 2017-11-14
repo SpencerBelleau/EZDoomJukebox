@@ -1,42 +1,81 @@
 #library "NEDM"
 #include "zcommon.acs"
 
+function void resetTrackList(void);
+function void setupTrackList(void);
+
 <<MUSICSTRINGS>>
 <<MUSICNAMES>>
-//This is no longer needed since it doesn't work properly anyway
-//will remove later
-//<<MUSICLENGTHS>>
+<<MUSICORDER>>
 int tracks = <<NUMTRACKS>>;
-int tracknum = -1;
 int oldtrackNum = 0;
+global int tracknum = -1;
 
-script "NEDM" OPEN
+function void resetTrackList(void)
+{
+	for(int i = 0; i < tracks; i++)
+	{
+		songOrder[i] = -1;
+	}
+	setupTrackList();
+}
+
+function void setupTrackList(void)
+{
+	//Check and see if we're already done
+	bool fullySetup = true;
+	for(int i = 0; i < tracks; i++)
+	{
+		if(songOrder[i] == -1)
+			fullySetup = false;
+	}
+	if(!fullySetup)
+	{
+		for(int i = 0; i < tracks; i++)
+		{
+			int index = random(0, tracks);
+			while(songOrder[index] != -1)
+			{
+				//Lord forgive me for this
+				if(random(0, 10) == 0)
+					index = (index + 1) % tracks;
+				else
+					index = random(0, tracks);
+				continue;
+			}
+			songOrder[index] = i;
+		}
+	}
+}
+
+//Only runs once (usually), please forgive me for mah sins
+script "NEDMSETUP" OPEN
+{
+	setupTrackList();
+}
+
+script "NEDM" ENTER
 {
 	while(1)
 	{
-		//Patented retard logic to avoid replays
 		if(tracknum == -1 && tracks > 1)
 		{
-			tracknum = random(0, tracks - 1);
-		}
-		else if(tracks > 1)
-		{
-			oldtrackNum = tracknum;
-			while(tracknum == oldtrackNum)
-			{
-				tracknum = random(0, tracks - 1);
-			}
+			tracknum = 0;
 		}
 		else
 		{
-			//you only got one song son wtf
-			tracknum = 0;
+			tracknum = (tracknum+1);
+			if(tracknum >= tracks)
+			{
+				resetTrackList();
+			}
+			tracknum = tracknum % tracks;
 		}
 		if(GetCVar("ezjb_showOnscreenMessages") == 1)
 		{
 			SetFont("SMALLFONT");
 			//improve this later, maybe with more templating
-			HudMessage(	s:"\cqNOW PLAYING: \cd", s:songRealNames[tracknum];
+			HudMessage(	s:"\cqNOW PLAYING: \cd", s:songRealNames[songOrder[tracknum]];
 						HUDMSG_PLAIN, 
 						3485, //random to avoid collision
 						CR_UNTRANSLATED,
@@ -44,7 +83,7 @@ script "NEDM" OPEN
 						0.0,
 						GetCVar("ezjb_textHoldTime") << 16); //pls work?
 		}
-		SetMusic(songNames[tracknum], 0);
+		SetMusic(songNames[songOrder[tracknum]], 0); //kill me please
 		while(GetCVar("ezjb_next") == 0)
 		{
 			delay(5); //no need to make this more precise
@@ -61,7 +100,7 @@ script "NEDM" OPEN
 		{
 			Log(s:"Could not switch to next song");
 			Log(d:GetCVar("ezjb_next"));
-			break;
+			continue;
 		}
 	}
 }

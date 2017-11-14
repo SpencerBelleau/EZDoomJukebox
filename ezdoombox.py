@@ -21,14 +21,14 @@ pk3Name = "EZDoomJukebox.pk3"
 
 songArray = "str songNames["
 songRNArray = "str songRealNames["
-durationArray = "int durations["
+orderArray = "global int songOrder["
 
 arrayJoin = 	"] = {"
 arrayFin = 		"};"
 
 templateSongArray = "<<MUSICSTRINGS>>"
 templateNameArray = "<<MUSICNAMES>>"
-templateDurationArray = "<<MUSICLENGTHS>>"
+templateOrderArray = "<<MUSICORDER>>"
 templateSongNumber = "<<NUMTRACKS>>"
 
 #Ensure we actually have the destinations available
@@ -69,7 +69,7 @@ for(root, _, filenames) in os.walk(baseMusicPath):
 
 songArray = songArray + str(len(songs)) + arrayJoin
 songRNArray = songRNArray + str(len(songs)) + arrayJoin
-durationArray = durationArray + str(len(songs)) + arrayJoin
+orderArray = orderArray + str(len(songs)) + arrayJoin
 
 ################## Copy them into the right directory and create arrays
 
@@ -83,18 +83,18 @@ for i in range(len(songs)):
 	shutil.copyfile(songs[i][0], pk3MusicPath + os.path.basename(songs[i][0]))
 	songArray = songArray + swq("music/" + os.path.basename(songs[i][0]))
 	songRNArray = songRNArray + swq(songs[i][2])
-	durationArray = durationArray + str(int(songs[i][1])*35) #in doom tics
+	orderArray = orderArray + str(-1) #OH BUDDY THIS ISN'T A HACK OR ANYTHING
 	if(i < len(songs)-1):
 		songArray = songArray + ", "
 		songRNArray = songRNArray + ", "
-		durationArray = durationArray + ", "
+		orderArray = orderArray + ", "
 songArray = songArray + arrayFin
 songRNArray = songRNArray + arrayFin
-durationArray = durationArray + arrayFin
+orderArray = orderArray + arrayFin
 
 print(songArray)
 print(songRNArray)
-print(durationArray)
+print(orderArray)
 
 ################## Now we do the fun part, using the template
 
@@ -105,8 +105,8 @@ for line in template:
 		line = line.replace(templateSongArray, songArray)
 	elif(templateNameArray in line):
 		line = line.replace(templateNameArray, songRNArray)
-	elif (templateDurationArray in line):
-		line = line.replace(templateDurationArray, durationArray)
+	elif (templateOrderArray in line):
+		line = line.replace(templateOrderArray, orderArray)
 	elif(templateSongNumber in line):
 		line = line.replace(templateSongNumber, str(len(songs)))
 	acs.write(line)
