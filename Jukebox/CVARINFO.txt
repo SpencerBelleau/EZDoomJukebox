@@ -1,3 +1,5 @@
 server int ezjb_showOnscreenMessages = 1;			//Shows NOW PLAYING: <songname>
 server int ezjb_textHoldTime = 3;					//Seconds to hold text on screen
 server int ezjb_next = 0;							//Handler for skipping songs
+server int ezjb_pos_x = 50;							//Horizontal position of message
+server int ezjb_pos_y = 0;							//Vertical position of message

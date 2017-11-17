@@ -73,14 +73,18 @@ script "NEDM" ENTER
 		}
 		if(GetCVar("ezjb_showOnscreenMessages") == 1)
 		{
+			int x = GetCVar("ezjb_pos_x") << 16;
+			int y = GetCVar("ezjb_pos_y") << 16;
+			x = x/100;
+			y = y/100;
 			SetFont("SMALLFONT");
 			//improve this later, maybe with more templating
 			HudMessage(	s:"\cqNOW PLAYING: \cd", s:songRealNames[songOrder[tracknum]];
 						HUDMSG_PLAIN, 
 						3485, //random to avoid collision
 						CR_UNTRANSLATED,
-						0.5,
-						0.0,
+						x,
+						y,
 						GetCVar("ezjb_textHoldTime") << 16); //pls work?
 		}
 		SetMusic(songNames[songOrder[tracknum]], 0); //kill me please
